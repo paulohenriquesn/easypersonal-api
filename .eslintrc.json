@@ -15,5 +15,17 @@
         "@typescript-eslint"
     ],
     "rules": {
-    }
+        "max-len": "off"
+    },
+    "overrides": [
+        {
+            "files": [
+                "**/*.spec.ts",
+                "**/*.test.ts",
+            ],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
 }
