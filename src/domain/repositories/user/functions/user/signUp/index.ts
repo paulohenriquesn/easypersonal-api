@@ -7,7 +7,8 @@ export async function signUp(request) : Promise<httpResponse> {
     "email",
     "name",
     "cpf",
-    "address"
+    "address",
+    "cellphone"
   ];
 
   for(const field of requiredFields) {
