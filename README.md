@@ -4,10 +4,10 @@
 
 ## Scripts
 
-Para executar projeto rode
+Para executar o projeto rode
 
 ```bash
-  fliway migrate
+  flyway migrate
   yarn install
   yarn start:dev
 ```
