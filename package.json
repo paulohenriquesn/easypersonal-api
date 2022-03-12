@@ -23,5 +23,8 @@
   },
   "scripts": {
     "test": "jest --watch"
+  },
+  "dependencies": {
+    "yup": "^0.32.11"
   }
 }
