@@ -1,1 +1,5 @@
  [x] Ensure SignUp will throws 400 if no email is provided
+ [x] Ensure SignUp will throws 400 if no name is provided
+ [x] Ensure SignUp will throws 400 if no cpf is provided
+ [x] Ensure SignUp will throws 400 if no address is provided
+ [x] Ensure SignUp will throws 400 if no cellphone is provided
