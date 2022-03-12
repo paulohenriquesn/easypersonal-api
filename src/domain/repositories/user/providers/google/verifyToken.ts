@@ -14,7 +14,7 @@ export async function validateToken(token: string): Promise<boolean> {
 
     const payload = ticket.getPayload();
     const userid = payload['sub'];
-    
+
     if(userid) return true;
 
   } catch {

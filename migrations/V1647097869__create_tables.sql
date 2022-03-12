@@ -12,6 +12,7 @@ CREATE TABLE trainers(
   cognito_id text,
   stripe_id text,
   stripe_subscription_id text,
+  trial boolean not null default true,
   created_at timestamp without time zone default now()
 );
 
