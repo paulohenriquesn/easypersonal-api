@@ -117,7 +117,7 @@ describe('signUp', () => {
     expect(response.body).toEqual(new MissingParamError('cellphone'))
   }) 
 
-  it('throw an error if no google_token is invalid',async () => {
+  it('throw an error if google_token is invalid',async () => {
       expect(await validateToken('teste')).toBe(false)
   }) 
 
