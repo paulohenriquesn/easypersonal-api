@@ -11,7 +11,8 @@
       "@repositories/*": ["./src/domain/repositories/*"],
       "@interfaces/*": ["./src/domain/interfaces/*"],
       "@helpers/*": ["./src/domain/helpers/*"],
-      "@errors/*": ["./src/domain/errors/*"]
+      "@errors/*": ["./src/domain/errors/*"],
+      "@schemas/*": ["./src/domain/schemas/*"]
     }
   }
 }
