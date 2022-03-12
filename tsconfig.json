@@ -12,7 +12,8 @@
       "@interfaces/*": ["./src/domain/interfaces/*"],
       "@helpers/*": ["./src/domain/helpers/*"],
       "@errors/*": ["./src/domain/errors/*"],
-      "@schemas/*": ["./src/domain/schemas/*"]
+      "@schemas/*": ["./src/domain/schemas/*"],
+      "@utils/*": ["./src/domain/utils/*"]
     }
   }
 }

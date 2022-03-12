@@ -14,6 +14,7 @@ export default {
     '^@helpers/(.*)$': '<rootDir>/src/domain/helpers/$1', 
     '^@errors/(.*)$': '<rootDir>/src/domain/errors/$1', 
     '^@schemas/(.*)$': '<rootDir>/src/domain/schemas/$1', 
+    '^@utils/(.*)$': '<rootDir>/src/domain/utils/$1', 
   }
 
 };
