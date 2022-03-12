@@ -26,11 +26,12 @@ describe('signUp', () => {
   it('should throw an error if no cpf is passed',async () => {
     const response = await signUp(<httpRequest> {
       body: {
-        email: 'paulo@blocksrvt.com'
+        email: 'paulo@blocksrvt.com',
+        name: 'Paulo Henrique',
       }
     });
     expect(response.statusCode).toBe(400)
-    expect(response.body).toEqual(new MissingParamError('name'))
+    expect(response.body).toEqual(new MissingParamError('cpf'))
   }) 
 
 })
