@@ -2,6 +2,7 @@ CREATE TABLE leads(email text primary key);
 
 CREATE TABLE trainers(
   id uuid primary key,
+  name text not null,
   email text not null,
   cpf text not null,
   address text not null,
