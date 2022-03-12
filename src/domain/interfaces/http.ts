@@ -1,7 +1,7 @@
 export interface httpResponse {
   statusCode: number,
   message?: string,
-  body: any
+  body?: any
 }
 
 export interface httpRequest {
