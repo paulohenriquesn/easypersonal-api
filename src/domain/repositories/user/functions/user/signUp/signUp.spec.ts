@@ -1,4 +1,4 @@
-import { MissingParamError } from "@errors/MissingParamError";
+import { MissingParamError, SchemaInvalid } from "@errors/index";
 import { httpRequest } from "@interfaces/http";
 import { signUp } from ".";
 
@@ -57,6 +57,20 @@ describe('signUp', () => {
     });
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('cellphone'))
+  }) 
+
+  it('should throw an error if schema is invalid',async () => {
+    const response = await signUp(<httpRequest> {
+      body: {
+        email: 'paulo@blocksrvt.com',
+        name: 'Paulo Henrique',
+        cpf: '321.232.356-99',
+        address: 'R do Joao N358',
+        cellphone: 123
+      }
+    });
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new SchemaInvalid())
   }) 
 
 })
