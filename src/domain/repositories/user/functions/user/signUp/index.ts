@@ -10,7 +10,8 @@ export async function signUp(request) : Promise<httpResponse> {
     "name",
     "cpf",
     "address",
-    "cellphone"
+    "cellphone",
+    "google_token"
   ];
 
   for(const field of requiredFields) {

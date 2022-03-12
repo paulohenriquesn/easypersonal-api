@@ -18,13 +18,13 @@
      "forceConsistentCasingInFileNames": false,
      "noFallthroughCasesInSwitch": false,
      "paths": {
-       "@domain/*": ["./src/domain/*"],
        "@repositories/*": ["./src/domain/repositories/*"],
        "@interfaces/*": ["./src/domain/interfaces/*"],
        "@helpers/*": ["./src/domain/helpers/*"],
        "@errors/*": ["./src/domain/errors/*"],
        "@schemas/*": ["./src/domain/schemas/*"],
-       "@utils/*": ["./src/domain/utils/*"]
+       "@utils/*": ["./src/domain/utils/*"],
+       "@log/*": ["./src/domain/log/*"]
      }
    }
  }

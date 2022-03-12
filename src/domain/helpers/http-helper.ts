@@ -1,5 +1,5 @@
-import logger from '@domain/log/logger';
 import { httpResponse } from '@interfaces/http';
+import logger from '@log/logger';
 
 export const badRequest = (error: Error): httpResponse => {
   logger.error(error.message);
