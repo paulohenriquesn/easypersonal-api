@@ -20,7 +20,7 @@ CREATE TABLE students(
   cellphone text not null,
   address text not null,
   cpf text not null,
-  bithday timestamp without time zone not null,
+  birthday timestamp without time zone not null,
   trainer_id uuid not null,
   created_at timestamp without time zone default now(),
   FOREIGN KEY (trainer_id) REFERENCES trainers(id) ON DELETE CASCADE

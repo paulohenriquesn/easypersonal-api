@@ -10,7 +10,6 @@
       "@domain/*": ["./src/domain/*"],
       "@repositories/*": ["./src/domain/repositories/*"],
       "@interfaces/*": ["./src/domain/interfaces/*"],
-      "@controllers/*": ["./src/domain/controllers/*"],
       "@helpers/*": ["./src/domain/helpers/*"],
       "@errors/*": ["./src/domain/errors/*"]
     }

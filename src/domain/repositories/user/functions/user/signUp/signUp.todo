@@ -1,0 +1,1 @@
+ [x] Ensure SignUp will throws 400 if no email is provided
