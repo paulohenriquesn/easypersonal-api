@@ -1,9 +1,18 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./dist",
     "module": "commonjs",
     "target": "es2019",
     "esModuleInterop": true,
-    "allowJs": true
+    "allowJs": true,
+    "paths": {
+      "@domain/*": ["./src/domain/*"],
+      "@repositories/*": ["./src/domain/repositories/*"],
+      "@interfaces/*": ["./src/domain/interfaces/*"],
+      "@controllers/*": ["./src/domain/controllers/*"],
+      "@helpers/*": ["./src/domain/helpers/*"],
+      "@errors/*": ["./src/domain/errors/*"]
+    }
   }
 }
