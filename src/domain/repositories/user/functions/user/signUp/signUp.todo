@@ -5,3 +5,5 @@
  [x] Ensure SignUp will throws 400 if no cellphone is provided
  [x] ensure SignUp will throws 400 if Schema is invalid
  [x] ensure SignUp will throws 400 if CPF is invalid
+ [x] ensure SignUp will throws 400 if token is invalid
+ 
