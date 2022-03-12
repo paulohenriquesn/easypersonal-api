@@ -34,4 +34,16 @@ describe('signUp', () => {
     expect(response.body).toEqual(new MissingParamError('cpf'))
   }) 
 
+  it('should throw an error if no address is passed',async () => {
+    const response = await signUp(<httpRequest> {
+      body: {
+        email: 'paulo@blocksrvt.com',
+        name: 'Paulo Henrique',
+        cpf: '321.232.356-99'
+      }
+    });
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new MissingParamError('address'))
+  }) 
+
 })
