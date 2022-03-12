@@ -1,5 +1,6 @@
-import logger from "@log/logger";
+import logger from '@log/logger';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { OAuth2Client } = require('google-auth-library');
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -15,12 +16,11 @@ export async function validateToken(token: string): Promise<boolean> {
     const payload = ticket.getPayload();
     const userid = payload['sub'];
 
-    if(userid) return true;
-
+    if (userid) return true;
   } catch {
-    logger.error('Google token invalid')
+    logger.error('Google token invalid');
     return false;
   }
-  
+
   return false;
 }

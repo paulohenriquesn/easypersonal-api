@@ -1,7 +1,7 @@
 export class SchemaInvalid extends Error {
   constructor() {
-    const messageError = `Schema Invalid`
+    const messageError = `Schema Invalid`;
     super(messageError);
-    this.name = 'SchemaInvalid'
+    this.name = 'SchemaInvalid';
   }
 }

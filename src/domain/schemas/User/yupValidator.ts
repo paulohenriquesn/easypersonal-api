@@ -7,4 +7,4 @@ export const userSchema = object({
   cpf: string().strict().required(),
   address: string().required(),
   cellphone: string().strict().required(),
-})
+});
