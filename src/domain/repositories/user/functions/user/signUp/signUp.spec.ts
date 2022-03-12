@@ -12,4 +12,14 @@ describe('signUp', () => {
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('email'))
   }) 
+
+  it('should throw an error if no name is passed',async () => {
+    const response = await signUp(<httpRequest> {
+      body: {
+        email: 'paulo@blocksrvt.com'
+      }
+    });
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new MissingParamError('name'))
+  }) 
 })
