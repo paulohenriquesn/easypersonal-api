@@ -4,3 +4,8 @@ node_modules/
 build/
 tmp/
 temp/
+migrations/flyway.conf
+dist/
+coverage/
+*.env
+*.DS_Store
