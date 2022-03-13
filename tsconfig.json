@@ -24,7 +24,8 @@
        "@errors/*": ["./src/domain/errors/*"],
        "@schemas/*": ["./src/domain/schemas/*"],
        "@utils/*": ["./src/domain/utils/*"],
-       "@log/*": ["./src/domain/log/*"]
+       "@log/*": ["./src/domain/log/*"],
+       "@providers/*": ["./src/domain/providers/*"]
      }
    }
  }
