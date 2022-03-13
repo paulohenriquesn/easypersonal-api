@@ -1,0 +1,4 @@
+[x] Ensure it will throws if no email is provided
+[x] Ensure it will throws if email is invalid
+[x] Ensure it will return a clean object if user no exists
+[] Ensure it will return a object with user data if user exists

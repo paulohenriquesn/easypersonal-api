@@ -1,0 +1,2 @@
+[x] Ensure it will throws if no email is provided
+[x] Ensure it will throws if email is invalid
