@@ -46,4 +46,20 @@ describe('sendEmail', () => {
     }
     expect(thrownError).toEqual(new ParamInvalid('to'));
   });
+
+  it('should throws if email is invalid', async () => {
+    let thrownError;
+    try {
+      const request = {
+        to: 'contato@paulohenriquesn.com',
+        content: 'ola',
+      };
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      await sendEmail(request);
+    } catch (error) {
+      thrownError = error;
+    }
+    expect(thrownError).toEqual(new ParamInvalid('to'));
+  });
 });
