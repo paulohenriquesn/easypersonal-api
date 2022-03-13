@@ -37,11 +37,9 @@ lerna-debug.log*
 
 # Env files
 *.env
-.env
 
 # Certificates
 *.crt
 
 # Flyway
 /migrations/flyway.conf
-.env

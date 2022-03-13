@@ -1,26 +1,30 @@
+import { Trainer } from '@entities/Trainer';
+import { serverError } from '@helpers/http-helper';
+import { httpResponse } from '@interfaces/http';
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { userExists } from '@repositories/user/functions/user/userExists';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(
+    @InjectRepository(Trainer)
+    private trainerRepository: Repository<Trainer>,
+  ) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async authUser(body, response) {
+    const { email } = body;
+    try {
+      const user = await userExists(email, this.trainerRepository);
+      return response.status(200).json(<httpResponse>{
+        statusCode: 200,
+        body: {
+          message: user ? 'Esse mlk ai existe!' : 'esse ai nao existe n',
+        },
+      });
+    } catch (err) {
+      return response.status(500).json(serverError(err));
+    }
   }
 }

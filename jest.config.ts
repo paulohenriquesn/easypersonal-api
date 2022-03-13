@@ -16,5 +16,6 @@ export default {
     '^@utils/(.*)$': '<rootDir>/src/domain/utils/$1',
     '^@log/(.*)$': '<rootDir>/src/domain/log/$1',
     '^@providers/(.*)$': '<rootDir>/src/domain/providers/$1',
+    '^@entities/(.*)$': '<rootDir>/src/entities/$1',
   },
 };

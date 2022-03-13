@@ -8,3 +8,11 @@ export const badRequest = (error: Error): httpResponse => {
     body: error,
   };
 };
+
+export const serverError = (error: Error): httpResponse => {
+  logger.error(error.message);
+  return {
+    statusCode: 500,
+    body: error,
+  };
+};

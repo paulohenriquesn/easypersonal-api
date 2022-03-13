@@ -18,10 +18,14 @@ Para executar o projeto rode
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
 
-`USER_POOL`
+`EMAIL_HOST`
 
-`AWS_KEY`
+`EMAIL_PORT`
 
-`AWS_SECRET`
+`EMAIL_USER`
+
+`EMAIL_PASSWORD`
 
 `GOOGLE_CLIENT_ID`
+
+`DB_URL`
