@@ -1,4 +1,6 @@
-export interface sendEmail {
-  to: string;
+export interface IMailView {
   content: string;
+  subject: string;
+  text: string;
+  html: string;
 }

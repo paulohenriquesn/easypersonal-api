@@ -1,6 +1,6 @@
 import { MissingParamError } from '@errors/MissingParamError';
 import { ParamInvalid } from '@errors/ParamInvalid';
-import { sendEmail as ISendEmail } from '@interfaces/sendEmail';
+import { IMailView } from '@interfaces/sendEmail';
 import logger from '@log/logger';
 import isEmail from 'validator/lib/isEmail';
 
@@ -9,14 +9,22 @@ const nodemailer = require('nodemailer');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
-export async function sendEmail(emailObject: ISendEmail): Promise<void> {
-  const requiredFields = ['to', 'content'];
+export async function sendEmail(
+  to: string,
+  emailView: IMailView,
+): Promise<void> {
+  const requiredFields = ['subject', 'content', 'text', 'html'];
+
+  if (!to) {
+    throw new MissingParamError('to');
+  }
+
   for (const field of requiredFields) {
-    if (emailObject[field] === undefined) {
+    if (emailView[field] === undefined) {
       throw new MissingParamError(field);
     }
   }
-  if (!isEmail(emailObject.to)) {
+  if (!isEmail(to)) {
     throw new ParamInvalid('to');
   }
 
@@ -30,12 +38,16 @@ export async function sendEmail(emailObject: ISendEmail): Promise<void> {
       pass: process.env.EMAIL_PASSWORD,
     },
   });
-  logger.info(`Sending email to ${emailObject.to}`);
-  await transporter.sendMail({
-    from: 'Easy Personal <info@easypersonal.com.br>',
-    to: emailObject.to,
-    subject: 'Hello',
-    text: 'Hello',
-    html: '<h1>oi</h1>',
-  });
+
+  logger.info(`Sending email to ${to}`);
+  try {
+    await transporter.sendMail({
+      from: 'Easy Personal <info@easypersonal.com.br>',
+      to,
+      ...emailView,
+    });
+    logger.success(`Email has been sent to ${to}`);
+  } catch (err) {
+    logger.error(err);
+  }
 }
