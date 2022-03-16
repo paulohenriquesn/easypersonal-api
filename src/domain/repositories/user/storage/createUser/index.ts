@@ -37,12 +37,15 @@ export async function createUser(
     if (userType === 'trainer') {
       await repositories.subscription.query(
         'insert into subscriptions(id, user_id) values ($1,$2)',
-        [nanoid, userId],
+        [nanoid(), userId],
       );
     }
     if (userType === 'student') {
       //trainerRelation
     }
+    logger.success(
+      `User ${userObject.email} with permission ${userType} created with successfull`,
+    );
     return {
       created: true,
       message: 'User created with successfull',
@@ -55,5 +58,5 @@ export async function createUser(
   } catch (error) {
     logger.error(error);
   }
-  return {};
+  return { created: false };
 }

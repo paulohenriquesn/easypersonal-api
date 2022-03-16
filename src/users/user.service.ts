@@ -23,15 +23,9 @@ export class UserService {
   ) {}
 
   async authUser(body, response) {
-    const { email, google_token, permission: user_permission } = body;
+    const { email, google_token } = body;
 
-    const requiredFields = [
-      'email',
-      'full_name',
-      'birthday',
-      'permission',
-      'google_token',
-    ];
+    const requiredFields = ['email', 'full_name', 'birthday', 'google_token'];
 
     for (const field of requiredFields) {
       if (body[field] === undefined) {
@@ -49,14 +43,16 @@ export class UserService {
       const user = await userExists(email, this.userRepository);
       const verifyToken = await validateToken(google_token);
 
-      if (verifyToken) {
+      if (!verifyToken) {
         if (user) {
           //Login()
         } else {
-          return await signUp(user_permission, body, {
+          const signUpUser = await signUp('trainer', body, {
             user: this.userRepository,
             subscription: this.subscriptionsRepository,
+            response,
           });
+          return response.status(signUpUser.statusCode).json(signUpUser);
         }
       } else {
         return response.status(401).json(serverError(new TokenInvalid()));
