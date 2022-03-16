@@ -1,12 +1,12 @@
 import { MissingParamError } from '@errors/MissingParamError';
 import { ParamInvalid } from '@errors/ParamInvalid';
-import { getTrainer } from '.';
+import { getUser } from '.';
 
-describe('getTrainer', () => {
+describe('getUser', () => {
   it('should throws if no email is provided', async () => {
     let ThrowError;
     try {
-      await getTrainer('');
+      await getUser('');
     } catch (err) {
       ThrowError = err;
     }
@@ -15,7 +15,7 @@ describe('getTrainer', () => {
   it('should throws if email is invalid', async () => {
     let ThrowError;
     try {
-      await getTrainer('contato');
+      await getUser('contato');
     } catch (err) {
       ThrowError = err;
     }

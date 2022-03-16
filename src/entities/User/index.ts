@@ -1,12 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('trainers')
-export class Trainer {
+@Entity('users')
+export class User {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
-  name: string;
+  @Column({ nullable: false })
+  full_name: string;
 
   @Column()
   email: string;
@@ -27,16 +27,5 @@ export class Trainer {
   cellphone: string;
 
   @Column()
-  cognito_id: boolean;
-
-  @Column()
-  stripe_id: string;
-
-  @Column()
-  stripe_subscription_id: string;
-  @Column()
-  trial: string;
-
-  @Column()
-  created_at: string;
+  student: boolean;
 }

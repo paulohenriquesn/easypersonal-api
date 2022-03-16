@@ -3,7 +3,7 @@ import { ParamInvalid } from '@errors/ParamInvalid';
 import logger from '@log/logger';
 import isEmail from 'validator/lib/isEmail';
 
-export async function getTrainer(userEmail: string, trainerRepository?: any) {
+export async function getUser(userEmail: string, userRepository?: any) {
   if (!userEmail) {
     throw new MissingParamError('email');
   }
@@ -12,8 +12,8 @@ export async function getTrainer(userEmail: string, trainerRepository?: any) {
     throw new ParamInvalid('email');
   }
 
-  logger.db(`Getting user ${userEmail} on trainers repository`);
-  const user = await trainerRepository.findOne({ email: userEmail });
+  logger.db(`Getting user ${userEmail} on users repository`);
+  const user = await userRepository.findOne({ email: userEmail });
 
   if (user.email) {
     logger.success(`Fetched user ${userEmail} on trainers repository`);

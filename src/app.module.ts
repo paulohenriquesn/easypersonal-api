@@ -1,4 +1,5 @@
-import { Trainer } from '@entities/Trainer';
+import { User } from '@entities/User';
+import { UserSubscriptions } from '@entities/UserSubscription';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +14,7 @@ import { AuthModule } from './auth/auth.module';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: process.env.DB_URL,
-        entities: [Trainer],
+        entities: [User, UserSubscriptions],
         synchronize: false,
       }),
     }),

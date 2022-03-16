@@ -1,4 +1,5 @@
-import { Trainer } from '@entities/Trainer';
+import { User } from '@entities/User';
+import { UserSubscriptions } from '@entities/UserSubscription';
 import { MissingParamError } from '@errors/MissingParamError';
 import { SchemaInvalid } from '@errors/SchemaInvalid';
 import { TokenInvalid } from '@errors/TokenInvalid';
@@ -6,6 +7,7 @@ import { badRequest, serverError } from '@helpers/http-helper';
 import { httpResponse } from '@interfaces/http';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { signUp } from '@repositories/user/functions/user/signUp';
 import { userExists } from '@repositories/user/functions/user/userExists';
 import { validateToken } from '@repositories/user/providers/google/verifyToken';
 import { userSchema } from '@schemas/User/yupValidator';
@@ -14,14 +16,21 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(Trainer)
-    private trainerRepository: Repository<Trainer>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private subscriptionsRepository: Repository<UserSubscriptions>,
   ) {}
 
   async authUser(body, response) {
-    const { email, google_token, name } = body;
+    const { email, google_token, permission: user_permission } = body;
 
-    const requiredFields = ['email', 'name', 'google_token'];
+    const requiredFields = [
+      'email',
+      'full_name',
+      'birthday',
+      'permission',
+      'google_token',
+    ];
 
     for (const field of requiredFields) {
       if (body[field] === undefined) {
@@ -36,15 +45,17 @@ export class AuthService {
     }
 
     try {
-      const user = await userExists(email, this.trainerRepository);
+      const user = await userExists(email, this.userRepository);
       const verifyToken = await validateToken(google_token);
+
       if (verifyToken) {
         if (user) {
           //Login()
-        }
-
-        if (!user) {
-          //Register()
+        } else {
+          return await signUp(user_permission, body, {
+            user: this.userRepository,
+            subscription: this.subscriptionsRepository,
+          });
         }
       } else {
         return response.status(401).json(serverError(new TokenInvalid()));

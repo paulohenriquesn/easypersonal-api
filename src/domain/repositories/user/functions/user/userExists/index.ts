@@ -1,11 +1,11 @@
 import { MissingParamError } from '@errors/MissingParamError';
 import { ParamInvalid } from '@errors/ParamInvalid';
-import { getTrainer } from '@repositories/user/storage/getTrainer';
+import { getUser } from '@repositories/user/storage/getUser';
 import isEmail from 'validator/lib/isEmail';
 
 export async function userExists(
   userEmail: string,
-  trainerRepository?: any,
+  userRepository?: any,
 ): Promise<boolean> {
   if (!userEmail) {
     throw new MissingParamError('email');
@@ -16,7 +16,7 @@ export async function userExists(
   }
 
   try {
-    await getTrainer(userEmail, trainerRepository);
+    await getUser(userEmail, userRepository);
     return true;
   } catch {
     return false;

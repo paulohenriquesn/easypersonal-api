@@ -1,18 +1,15 @@
-import { MissingParamError, ParamInvalid, SchemaInvalid } from '@errors/index';
-import { badRequest } from '@helpers/http-helper';
+import { MissingParamError, SchemaInvalid } from '@errors/index';
+import { badRequest, serverError } from '@helpers/http-helper';
 import { httpResponse } from '@interfaces/http';
+import { createUser as createUserStorage } from '@repositories/user/storage/createUser';
 import { userSchema } from '@schemas/User/yupValidator';
-import { cpfValidator } from '@utils/cpfValidator';
 
-export async function signUp(request): Promise<httpResponse> {
-  const requiredFields = [
-    'email',
-    'name',
-    'cpf',
-    'address',
-    'cellphone',
-    'google_token',
-  ];
+export async function signUp(
+  userType,
+  request,
+  repositories?,
+): Promise<httpResponse> {
+  const requiredFields = ['email', 'full_name', 'birthday'];
 
   for (const field of requiredFields) {
     if (request.body[field] === undefined) {
@@ -24,11 +21,14 @@ export async function signUp(request): Promise<httpResponse> {
     return badRequest(new SchemaInvalid());
   }
 
-  if (!cpfValidator(request.body.cpf)) {
-    return badRequest(new ParamInvalid('cpf'));
+  if (
+    (await createUserStorage(request.body, userType, repositories)) === true
+  ) {
+    return <httpResponse>{
+      statusCode: 200,
+      message: 'User created with successfull',
+    };
+  } else {
+    return serverError(new Error('Error on creating user on storage'));
   }
-
-  return <httpResponse>{
-    statusCode: 200,
-  };
 }
