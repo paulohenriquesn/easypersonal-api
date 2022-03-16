@@ -29,3 +29,5 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 `GOOGLE_CLIENT_ID`
 
 `DB_URL`
+
+`JWT_SECRET`
