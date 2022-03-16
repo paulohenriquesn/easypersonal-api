@@ -1,9 +1,9 @@
 create table users(
   id uuid primary key not null,
   full_name text not null,
-  email text not null,
+  email text not null unique,
   picture text,
-  cpf text,
+  cpf text unique,
   address text,
   cellphone text,
   birthday timestamp without time zone not null,
@@ -14,10 +14,10 @@ create table users(
 
 create table subscriptions(
   id text primary key not null,
-  user_id uuid not null,
+  user_id uuid not null unique,
   stripe_id text,
   stripe_subscription_id text,
   trial boolean not null default true,
-   created_at timestamp without time zone not null default now(),
+  created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now()
 );

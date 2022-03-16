@@ -16,7 +16,7 @@ export async function createUser(
   userType: string,
   repositories?: any,
   trainerRelation?: any,
-): Promise<boolean> {
+): Promise<any> {
   if (!isEmail(userObject.email)) {
     throw new ParamInvalid('email');
   }
@@ -43,9 +43,17 @@ export async function createUser(
     if (userType === 'student') {
       //trainerRelation
     }
-    return true;
+    return {
+      created: true,
+      message: 'User created with successfull',
+      user_data: {
+        id: userId,
+        full_name: userObject.full_name,
+        email: userObject.email,
+      },
+    };
   } catch (error) {
     logger.error(error);
   }
-  return false;
+  return {};
 }

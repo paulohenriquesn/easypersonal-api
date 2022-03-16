@@ -3,6 +3,7 @@ import { badRequest, serverError } from '@helpers/http-helper';
 import { httpResponse } from '@interfaces/http';
 import { createUser as createUserStorage } from '@repositories/user/storage/createUser';
 import { userSchema } from '@schemas/User/yupValidator';
+import { generateUserToken } from '../generateToken';
 
 export async function signUp(
   userType,
@@ -21,12 +22,19 @@ export async function signUp(
     return badRequest(new SchemaInvalid());
   }
 
-  if (
-    (await createUserStorage(request.body, userType, repositories)) === true
-  ) {
+  const user = await createUserStorage(request.body, userType, repositories);
+  if (user.created) {
+    const userToken = await generateUserToken({
+      student: userType === 'student' ? true : false,
+      email: request.body.email,
+      id: user.user_data.id,
+    });
     return <httpResponse>{
       statusCode: 200,
       message: 'User created with successfull',
+      body: {
+        token: userToken,
+      },
     };
   } else {
     return serverError(new Error('Error on creating user on storage'));
