@@ -14,9 +14,8 @@ export async function getUser(userEmail: string, userRepository?: any) {
 
   logger.db(`Getting user ${userEmail} on users repository`);
   const user = await userRepository.findOne({ email: userEmail });
-
   if (user.email) {
-    logger.success(`Fetched user ${userEmail} on trainers repository`);
+    logger.success(`Fetched user ${userEmail} on users repository`);
     return user;
   }
 
