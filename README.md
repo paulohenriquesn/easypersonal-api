@@ -18,19 +18,19 @@ Para executar o projeto rode
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
 
-`EMAIL_HOST`
+`EMAIL_HOST` Host SMTP para envio de emails
 
-`EMAIL_PORT`
+`EMAIL_PORT` Port SMTP
 
-`EMAIL_USER`
+`EMAIL_USER` User SMTP
 
-`EMAIL_PASSWORD`
+`EMAIL_PASSWORD` Password SMTP
 
-`GOOGLE_CLIENT_ID`
+`GOOGLE_CLIENT_ID` ClientID utilizado para autenticação para google/auth
 
-`DB_URL`
+`DB_URL` URL Connection do Banco de Dados (PostgreSQL)
 
-`JWT_SECRET`
+`JWT_SECRET` Secret text para geração de secure tokens
 
 ## Stages
 
