@@ -31,3 +31,8 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 `DB_URL`
 
 `JWT_SECRET`
+
+## Stages
+
+Link de test-staged
+`https://testapi.easypersonal.com.br/`
