@@ -43,7 +43,7 @@ export class UserService {
       const user = await userExists(email, this.userRepository);
       const verifyToken = await validateToken(google_token);
 
-      if (!verifyToken) {
+      if (verifyToken) {
         if (user) {
           //Login()
         } else {
