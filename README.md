@@ -40,6 +40,8 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 
 `GOOGLE_CLIENT_ID` ClientID utilizado para autenticação para google/auth
 
+`CLIENT_ID_REACT_NATIVE` ClientID Google utilizado para autenticação para google/auth
+
 `DB_URL` URL Connection do Banco de Dados (PostgreSQL)
 
 `JWT_SECRET` Secret text para geração de secure tokens
