@@ -36,4 +36,7 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 ## Stages
 
 `https://testapi.easypersonal.com.br/` (test-staged-api)
+
+# Docs
+
 `https://testapi.easypersonal.com.br/api` (test-staged-swagger-docs)
