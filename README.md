@@ -14,6 +14,7 @@ Para executar o projeto rode
 
 
 É preciso criar uma config do flyway para rodar as migrations.
+
 ## Variáveis de Ambiente
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
@@ -34,5 +35,4 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 
 ## Stages
 
-Link de test-staged
-`https://testapi.easypersonal.com.br/`
+`https://testapi.easypersonal.com.br/` Link de test-staged
