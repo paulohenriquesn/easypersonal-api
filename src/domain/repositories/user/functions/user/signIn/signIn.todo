@@ -1,0 +1,3 @@
+[x] Verify if user exists
+[x] Generate a Token JWT for user
+[x] Return token for user

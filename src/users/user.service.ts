@@ -4,9 +4,9 @@ import { MissingParamError } from '@errors/MissingParamError';
 import { SchemaInvalid } from '@errors/SchemaInvalid';
 import { TokenInvalid } from '@errors/TokenInvalid';
 import { badRequest, serverError } from '@helpers/http-helper';
-import { httpResponse } from '@interfaces/http';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { signIn } from '@repositories/user/functions/user/signIn';
 import { signUp } from '@repositories/user/functions/user/signUp';
 import { userExists } from '@repositories/user/functions/user/userExists';
 import { validateToken } from '@repositories/user/providers/google/verifyToken';
@@ -45,25 +45,20 @@ export class UserService {
 
       if (verifyToken) {
         if (user) {
-          //Login()
+          const signInUser = await signIn(body, {
+            user: this.userRepository,
+          });
+          return response.status(signInUser.statusCode).json(signInUser);
         } else {
           const signUpUser = await signUp('trainer', body, {
             user: this.userRepository,
             subscription: this.subscriptionsRepository,
-            response,
           });
           return response.status(signUpUser.statusCode).json(signUpUser);
         }
       } else {
         return response.status(401).json(serverError(new TokenInvalid()));
       }
-
-      return response.status(200).json(<httpResponse>{
-        statusCode: 200,
-        body: {
-          message: user ? 'Esse mlk ai existe!' : 'esse ai nao existe n',
-        },
-      });
     } catch (err) {
       return response.status(500).json(serverError(err));
     }
