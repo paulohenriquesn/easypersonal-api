@@ -15,6 +15,17 @@ Para executar o projeto rode
 
 É preciso criar uma config do flyway para rodar as migrations.
 
+# Exemplo de Flyway Config
+Você deve criar um `flyway.conf` dentro da pasta migrations/
+
+```bash
+flyway.baselineOnMigrate=true
+flyway.locations=filesystem:.
+flyway.url=jdbc:postgresql://DB_HOST:DB_PORT/DB_NAME
+flyway.user=DB_USER
+flyway.password=DB_PASSWORD
+```
+
 ## Variáveis de Ambiente
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
