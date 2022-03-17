@@ -8,7 +8,6 @@ interface IUser {
   full_name: string;
   email: string;
   google_token?: string;
-  birthday: string;
 }
 
 export async function createUser(
@@ -25,12 +24,11 @@ export async function createUser(
   try {
     const userId = uuidv4();
     await repositories.user.query(
-      'insert into users(id, full_name,email,birthday,student) values ($1,$2,$3,$4,$5)',
+      'insert into users(id, full_name,email,student) values ($1,$2,$3,$4)',
       [
         userId,
         userObject.full_name,
         userObject.email,
-        userObject.birthday,
         userType === 'student' ? true : false,
       ],
     );

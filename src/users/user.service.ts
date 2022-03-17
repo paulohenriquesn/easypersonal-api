@@ -25,7 +25,7 @@ export class UserService {
   async authUser(body, response) {
     const { email, google_token } = body;
 
-    const requiredFields = ['email', 'full_name', 'birthday', 'google_token'];
+    const requiredFields = ['email', 'full_name', 'google_token'];
 
     for (const field of requiredFields) {
       if (body[field] === undefined) {

@@ -11,7 +11,7 @@ export async function signUp(
   body,
   repositories?,
 ): Promise<httpResponse> {
-  const requiredFields = ['email', 'full_name', 'birthday'];
+  const requiredFields = ['email', 'full_name'];
 
   for (const field of requiredFields) {
     if (body[field] === undefined) {
