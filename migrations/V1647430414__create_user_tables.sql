@@ -6,7 +6,7 @@ create table users(
   cpf text unique,
   address text,
   cellphone text,
-  birthday timestamp without time zone not null,
+  birthday timestamp without time zone,
   student boolean default false,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone  not null default now()
