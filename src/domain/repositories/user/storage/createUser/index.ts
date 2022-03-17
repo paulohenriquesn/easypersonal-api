@@ -46,6 +46,7 @@ export async function createUser(
     logger.success(
       `User ${userObject.email} with permission ${userType} created with successfull`,
     );
+
     return {
       created: true,
       message: 'User created with successfull',
