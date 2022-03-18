@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Headers, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Param,
+  Post,
+  Res
+} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClassesService } from './classes.service';
 import { createModalityDto } from './swagger/createModality';
@@ -37,5 +45,25 @@ export class ClassesController {
   async fetchModalities(@Headers() headers, @Res() res) {
     const token = headers.authorization;
     return await this.classesService.fetchModalities(token, res);
+  }
+
+  @ApiBody({
+    description: 'Fetch a modality',
+  })
+  @ApiOperation({
+    summary:
+      'Essa rota retorna uma modalidade especifica treinador (JWT Token)',
+    description:
+      'Essa rota retorna uma modalidade especifica treinador (JWT Token)',
+  })
+  @ApiSecurity('jwt_token')
+  @Get('/modality/:modality_id')
+  async fetchModality(
+    @Headers() headers,
+    @Param('modality_id') modality_id,
+    @Res() res,
+  ) {
+    const token = headers.authorization;
+    return await this.classesService.fetchModality(token, modality_id, res);
   }
 }

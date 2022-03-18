@@ -8,6 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createModality } from '@repositories/classes/functions/createModality';
 import { getModalities } from '@repositories/classes/functions/getModalities';
+import { getModalityOnStorage } from '@repositories/classes/storage/getModality';
 import { getTrainerData } from '@utils/getTrainerData';
 import { Repository } from 'typeorm';
 
@@ -74,6 +75,34 @@ export class ClassesService {
         .json(<httpResponse>{ statusCode: 200, body: modalities });
     } catch (err) {
       logger.error(err);
+      return res.status(500).json(serverError(err));
+    }
+  }
+
+  async fetchModality(token, modality_id, res) {
+    const trainer_data = getTrainerData(token);
+    //@ts-ignore
+    if (trainer_data.error === true) {
+      return res.status(401).json(trainer_data);
+    }
+    try {
+      const modality = await getModalityOnStorage(
+        trainer_data.body.userId,
+        modality_id,
+        this.modalityRepository,
+      );
+      if (modality) {
+        return res
+          .status(200)
+          .json(<httpResponse>{ statusCode: 200, body: modality });
+      } else {
+        return res
+          .status(500)
+          .json(serverError(new Error(`Modality ${modality_id} not found`)));
+      }
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).json(serverError(err));
     }
   }
 }
