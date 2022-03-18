@@ -1,9 +1,9 @@
 import { getModalityOnStorage } from '@repositories/classes/storage/getModality';
 
-export async function getModalities(
+export async function getModality(
   userId,
   modalityId,
   modalityRepository,
-): Promise<boolean> {
+): Promise<any> {
   return await getModalityOnStorage(userId, modalityId, modalityRepository);
 }

@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Headers,
   Param,
   Post,
+  Put,
   Res
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
@@ -52,9 +54,9 @@ export class ClassesController {
   })
   @ApiOperation({
     summary:
-      'Essa rota retorna uma modalidade especifica treinador (JWT Token)',
+      'Essa rota retorna uma modalidade especifica do treinador (JWT Token)',
     description:
-      'Essa rota retorna uma modalidade especifica treinador (JWT Token)',
+      'Essa rota retorna uma modalidade especifica do treinador (JWT Token)',
   })
   @ApiSecurity('jwt_token')
   @Get('/modality/:modality_id')
@@ -65,5 +67,51 @@ export class ClassesController {
   ) {
     const token = headers.authorization;
     return await this.classesService.fetchModality(token, modality_id, res);
+  }
+
+  @ApiBody({
+    description: 'Delete a modality',
+  })
+  @ApiOperation({
+    summary:
+      'Essa rota deleta uma modalidade especifica do treinador (JWT Token)',
+    description:
+      'Essa rota retorna uma modalidade especifica do treinador (JWT Token)',
+  })
+  @ApiSecurity('jwt_token')
+  @Delete('/modality/:modality_id')
+  async deleteAModality(
+    @Headers() headers,
+    @Param('modality_id') modality_id,
+    @Res() res,
+  ) {
+    const token = headers.authorization;
+    return await this.classesService.deleteAModality(token, modality_id, res);
+  }
+
+  @ApiBody({
+    description: 'Edit a modality',
+  })
+  @ApiOperation({
+    summary:
+      'Essa rota edita uma modalidade especifica do treinador (JWT Token)',
+    description:
+      'Essa rota edita uma modalidade especifica do treinador (JWT Token)',
+  })
+  @ApiSecurity('jwt_token')
+  @Put('/modality/:modality_id')
+  async editAModality(
+    @Headers() headers,
+    @Param('modality_id') modality_id,
+    @Body() body,
+    @Res() res,
+  ) {
+    const token = headers.authorization;
+    return await this.classesService.editAModality(
+      token,
+      modality_id,
+      body,
+      res,
+    );
   }
 }

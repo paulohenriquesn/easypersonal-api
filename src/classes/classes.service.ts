@@ -7,8 +7,10 @@ import logger from '@log/logger';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createModality } from '@repositories/classes/functions/createModality';
+import { deleteModality } from '@repositories/classes/functions/deleteModality';
+import { editModality } from '@repositories/classes/functions/editModality';
 import { getModalities } from '@repositories/classes/functions/getModalities';
-import { getModalityOnStorage } from '@repositories/classes/storage/getModality';
+import { getModality } from '@repositories/classes/functions/getModality';
 import { getTrainerData } from '@utils/getTrainerData';
 import { Repository } from 'typeorm';
 
@@ -86,7 +88,7 @@ export class ClassesService {
       return res.status(401).json(trainer_data);
     }
     try {
-      const modality = await getModalityOnStorage(
+      const modality = await getModality(
         trainer_data.body.userId,
         modality_id,
         this.modalityRepository,
@@ -95,6 +97,67 @@ export class ClassesService {
         return res
           .status(200)
           .json(<httpResponse>{ statusCode: 200, body: modality });
+      } else {
+        return res
+          .status(500)
+          .json(serverError(new Error(`Modality ${modality_id} not found`)));
+      }
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).json(serverError(err));
+    }
+  }
+
+  async deleteAModality(token, modality_id, res) {
+    const trainer_data = getTrainerData(token);
+    //@ts-ignore
+    if (trainer_data.error === true) {
+      return res.status(401).json(trainer_data);
+    }
+
+    try {
+      if (
+        await deleteModality(
+          trainer_data.body.userId,
+          modality_id,
+          this.modalityRepository,
+        )
+      ) {
+        return res.status(200).json(<httpResponse>{
+          statusCode: 200,
+          message: `Modality ${modality_id} deleted`,
+          body: {},
+        });
+      } else {
+        return res
+          .status(500)
+          .json(serverError(new Error(`Modality ${modality_id} not found`)));
+      }
+    } catch (err) {
+      logger.error(err);
+      return res.status(500).json(serverError(err));
+    }
+  }
+
+  async editAModality(token, modality_id, body, res) {
+    const trainer_data = getTrainerData(token);
+    //@ts-ignore
+    if (trainer_data.error === true) {
+      return res.status(401).json(trainer_data);
+    }
+    try {
+      if (
+        await editModality(
+          trainer_data.body.userId,
+          modality_id,
+          body,
+          this.modalityRepository,
+        )
+      ) {
+        return res.status(200).json(<httpResponse>{
+          statusCode: 200,
+          body,
+        });
       } else {
         return res
           .status(500)
