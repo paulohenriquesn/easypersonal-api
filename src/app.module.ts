@@ -7,7 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { ClassesModule } from './classes/classes.module';
 import { UserModule } from './users/user.module';
 @Module({
   imports: [
@@ -19,11 +18,15 @@ import { UserModule } from './users/user.module';
         url: process.env.DB_URL,
         entities: [User, UserSubscriptions, Modality],
         synchronize: false,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        },
       }),
     }),
     AuthModule,
     UserModule,
-    ClassesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
