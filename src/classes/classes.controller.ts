@@ -7,8 +7,10 @@ import {
   Param,
   Post,
   Put,
-  Res
+  Res,
+  UseGuards
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiBody, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClassesService } from './classes.service';
 import { createModalityDto } from './swagger/createModality';
@@ -27,6 +29,7 @@ export class ClassesController {
     description: 'Essa rota cria uma modalidade para uma aula',
   })
   @ApiSecurity('jwt_token')
+  @UseGuards(AuthGuard('jwt'))
   @Post('/modality')
   async createModality(@Headers() headers, @Body() body, @Res() res) {
     const token = headers.authorization;
@@ -43,6 +46,7 @@ export class ClassesController {
       'Essa rota retorna todas as modalidades de um treinador (JWT Token)',
   })
   @ApiSecurity('jwt_token')
+  @UseGuards(AuthGuard('jwt'))
   @Get('/modality')
   async fetchModalities(@Headers() headers, @Res() res) {
     const token = headers.authorization;
@@ -59,6 +63,7 @@ export class ClassesController {
       'Essa rota retorna uma modalidade especifica do treinador (JWT Token)',
   })
   @ApiSecurity('jwt_token')
+  @UseGuards(AuthGuard('jwt'))
   @Get('/modality/:modality_id')
   async fetchModality(
     @Headers() headers,
@@ -79,6 +84,7 @@ export class ClassesController {
       'Essa rota retorna uma modalidade especifica do treinador (JWT Token)',
   })
   @ApiSecurity('jwt_token')
+  @UseGuards(AuthGuard('jwt'))
   @Delete('/modality/:modality_id')
   async deleteAModality(
     @Headers() headers,
@@ -99,6 +105,7 @@ export class ClassesController {
       'Essa rota edita uma modalidade especifica do treinador (JWT Token)',
   })
   @ApiSecurity('jwt_token')
+  @UseGuards(AuthGuard('jwt'))
   @Put('/modality/:modality_id')
   async editAModality(
     @Headers() headers,
