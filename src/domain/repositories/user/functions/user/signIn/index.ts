@@ -9,10 +9,8 @@ export async function signIn(body: any, repositories: any) {
   try {
     const user = await userExists(body.email, repositories.user);
     if (user) {
-      const user_data = await repositories.user.query(
-        `select (id,student) from users where email=$1`,
-        [body.email],
-      );
+      const user_data = await repositories.user.findOne({ email: body.email });
+
       const token = await generateUserToken({
         id: user_data.id,
         student: user_data.student,

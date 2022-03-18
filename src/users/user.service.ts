@@ -10,6 +10,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { signIn } from '@repositories/user/functions/user/signIn';
 import { signUp } from '@repositories/user/functions/user/signUp';
+import { updateUser } from '@repositories/user/functions/user/updateUser';
 import { userExists } from '@repositories/user/functions/user/userExists';
 import { validateJwtToken } from '@repositories/user/functions/user/validateToken';
 import { validateToken } from '@repositories/user/providers/google/verifyToken';
@@ -26,7 +27,7 @@ export class UserService {
     private subscriptionsRepository: Repository<UserSubscriptions>,
   ) {}
 
-  async authUser(body, response) {
+  async auth(body, response) {
     const { email, google_token } = body;
 
     const requiredFields = ['email', 'full_name', 'google_token'];
@@ -68,7 +69,7 @@ export class UserService {
     }
   }
 
-  async fetchUser(token, response) {
+  async fetch(token, response) {
     try {
       const token_decoded = validateJwtToken(token.split(' ')[1]);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -77,6 +78,24 @@ export class UserService {
       return response
         .status(200)
         .json(<httpResponse>{ statusCode: 200, body: user });
+    } catch (err) {
+      logger.error(err);
+      return response.status(500).json(serverError(new TokenInvalid()));
+    }
+  }
+
+  async update(token, body, response) {
+    try {
+      const token_decoded = validateJwtToken(token.split(' ')[1]);
+      if (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        await updateUser(token_decoded.userEmail, body, this.userRepository)
+      ) {
+        return response
+          .status(200)
+          .json(<httpResponse>{ statusCode: 200, body });
+      }
     } catch (err) {
       logger.error(err);
       return response.status(500).json(serverError(new TokenInvalid()));
