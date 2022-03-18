@@ -25,8 +25,8 @@ export class ClassesController {
     type: createModalityDto,
   })
   @ApiOperation({
-    summary: 'Essa rota cria uma modalidade para uma aula',
-    description: 'Essa rota cria uma modalidade para uma aula',
+    summary: 'Essa rota cria uma modalidade para uma aula (JWT Token)',
+    description: 'Essa rota cria uma modalidade para uma aula (JWT Token)',
   })
   @ApiSecurity('jwt_token')
   @UseGuards(AuthGuard('jwt'))

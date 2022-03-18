@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Modality } from '@entities/Modality';
 import { MissingParamError } from '@errors/MissingParamError';
-import { serverError } from '@helpers/http-helper';
+import { SchemaInvalid } from '@errors/SchemaInvalid';
+import { badRequest, serverError } from '@helpers/http-helper';
 import { httpResponse } from '@interfaces/http';
 import logger from '@log/logger';
 import { Injectable } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { deleteModality } from '@repositories/classes/functions/deleteModality';
 import { editModality } from '@repositories/classes/functions/editModality';
 import { getModalities } from '@repositories/classes/functions/getModalities';
 import { getModality } from '@repositories/classes/functions/getModality';
+import { createModalitySchema } from '@schemas/Classes/yupValidator';
 import { getTrainerData } from '@utils/getTrainerData';
 import { Repository } from 'typeorm';
 
@@ -25,12 +27,12 @@ export class ClassesService {
 
     for (const field of requiredFields) {
       if (body[field] === undefined) {
-        return res.status(401).json(<httpResponse>{
-          statusCode: 401,
-          message: `Field ${field} is missing`,
-          body: new MissingParamError(field),
-        });
+        return res.status(201).json(badRequest(new MissingParamError(field)));
       }
+    }
+
+    if (!createModalitySchema.isValidSync(body)) {
+      return res.status(400).json(badRequest(new SchemaInvalid()));
     }
 
     const trainer_data = getTrainerData(token);
