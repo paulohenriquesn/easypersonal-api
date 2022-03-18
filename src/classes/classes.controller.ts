@@ -24,12 +24,13 @@ export class ClassesController {
   }
 
   @ApiBody({
-    description: 'Create a Modality for a Class',
-    type: createModalityDto,
+    description: 'Fetch modalities',
   })
   @ApiOperation({
-    summary: 'Essa rota cria uma modalidade para uma aula (JWT Token)',
-    description: 'Essa rota cria uma modalidade para uma aula (JWT Token)',
+    summary:
+      'Essa rota retorna todas as modalidades de um treinador (JWT Token)',
+    description:
+      'Essa rota retorna todas as modalidades de um treinador (JWT Token)',
   })
   @ApiSecurity('jwt_token')
   @Get('/modality')
