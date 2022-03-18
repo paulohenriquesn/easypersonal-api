@@ -8,7 +8,6 @@ async function bootstrap() {
     .setTitle('API Service')
     .setDescription('The Official API Easy Personal')
     .setVersion('1.0')
-    .addTag('easypersonal')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

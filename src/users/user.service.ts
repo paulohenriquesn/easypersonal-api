@@ -79,7 +79,7 @@ export class UserService {
         .json(<httpResponse>{ statusCode: 200, body: user });
     } catch (err) {
       logger.error(err);
-      return response.status(500).json(serverError(err));
+      return response.status(500).json(serverError(new TokenInvalid()));
     }
   }
 }
