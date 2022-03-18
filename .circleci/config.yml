@@ -1,16 +1,19 @@
-version: 2.1
+version: '2.1'
 orbs:
   node: circleci/node@5.0.1
 jobs:
-  build-and-test:
+  test:
     executor:
       name: node/default
+      tag: '16'
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          pkg-manager: yarn
       - run:
-          command: npm run test
+          command: yarn run test
+          name: Run YARN tests
 workflows:
-  build-and-test:
+  test_my_app:
     jobs:
-      - build-and-test
+      - test
