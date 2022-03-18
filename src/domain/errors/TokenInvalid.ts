@@ -1,6 +1,6 @@
 export class TokenInvalid extends Error {
   constructor() {
-    const messageError = `Google token is invalid`;
+    const messageError = `Token is invalid`;
     super(messageError);
     this.name = 'TokenInvalid';
   }
