@@ -17,11 +17,6 @@ import { UserModule } from './users/user.module';
         url: process.env.DB_URL,
         entities: [User, UserSubscriptions],
         synchronize: false,
-        extra: {
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        },
       }),
     }),
     AuthModule,
