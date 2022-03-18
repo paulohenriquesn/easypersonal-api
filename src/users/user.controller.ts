@@ -27,7 +27,7 @@ export class UserController {
   })
   @Post('/auth')
   async auth(@Body() body, @Res() res) {
-    return this.userService.auth(body, res);
+    return await this.userService.auth(body, res);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -40,7 +40,7 @@ export class UserController {
   @Get('/')
   async fetch(@Headers() headers, @Res() res) {
     const token = headers.authorization;
-    return this.userService.fetch(token, res);
+    return await this.userService.fetch(token, res);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -53,6 +53,6 @@ export class UserController {
   @Put('/')
   async updateUser(@Headers() headers, @Body() body, @Res() res) {
     const token = headers.authorization;
-    return this.userService.update(token, body, res);
+    return await this.userService.update(token, body, res);
   }
 }
