@@ -35,7 +35,6 @@ export class ClassesController {
     const token = headers.authorization;
     return await this.classesService.createModality(token, body, res);
   }
-
   @ApiBody({
     description: 'Fetch modalities',
   })

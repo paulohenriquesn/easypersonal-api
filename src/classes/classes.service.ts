@@ -68,7 +68,6 @@ export class ClassesService {
     if (trainer_data.error === true) {
       return res.status(401).json(trainer_data);
     }
-
     try {
       const modalities = await getModalities(
         trainer_data.body.userId,
