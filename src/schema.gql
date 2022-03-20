@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Modality {
+  id: ID!
+  name: String!
+  trainer_id: String!
+  color: String!
+  created_at: String!
+}
+
+type Query {
+  getAllModalities(userId: String!): [Modality!]!
+  getAModality(userId: String!, modalityId: String!): Modality!
+}
+
+type Mutation {
+  createAModality(data: CreateModalityInput!): Modality!
+  deleteAModality(userId: String!, modalityId: String!): Modality!
+  editAModality(userId: String!, modalityId: String!, data: EditModalityInput!): Modality!
+}
+
+input CreateModalityInput {
+  name: String!
+  trainer_id: String!
+  color: String!
+}
+
+input EditModalityInput {
+  name: String
+  color: String
+}

@@ -1,9 +1,12 @@
 import { Modality } from '@entities/Modality';
 import { User } from '@entities/User';
 import { UserSubscriptions } from '@entities/UserSubscription';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -19,12 +22,11 @@ import { UserModule } from './users/user.module';
         url: process.env.DB_URL,
         entities: [User, UserSubscriptions, Modality],
         synchronize: false,
-        extra: {
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        },
       }),
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      driver: ApolloDriver,
     }),
     AuthModule,
     UserModule,
