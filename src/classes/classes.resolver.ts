@@ -27,6 +27,7 @@ export class ClassesResolver {
   }
 
   @Mutation(() => Modality)
+  @UseGuards(GqlAuthGuard)
   async createAModality(
     @Args('data') data: CreateModalityInput,
   ): Promise<Modality> {
@@ -35,6 +36,7 @@ export class ClassesResolver {
   }
 
   @Mutation(() => Modality)
+  @UseGuards(GqlAuthGuard)
   async deleteAModality(
     @Args('userId') userId: string,
     @Args('modalityId') modalityId: string,
@@ -47,6 +49,7 @@ export class ClassesResolver {
   }
 
   @Mutation(() => Modality)
+  @UseGuards(GqlAuthGuard)
   async editAModality(
     @Args('userId') userId: string,
     @Args('modalityId') modalityId: string,
