@@ -1,171 +1,177 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { Class } from '@entities/Class';
 import { Modality } from '@entities/Modality';
-import { MissingParamError } from '@errors/MissingParamError';
-import { serverError } from '@helpers/http-helper';
-import { httpResponse } from '@interfaces/http';
 import logger from '@log/logger';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createModality } from '@repositories/classes/functions/createModality';
-import { deleteModality } from '@repositories/classes/functions/deleteModality';
-import { editModality } from '@repositories/classes/functions/editModality';
-import { getModalities } from '@repositories/classes/functions/getModalities';
-import { getModality } from '@repositories/classes/functions/getModality';
-import { getTrainerData } from '@utils/getTrainerData';
+import { nanoid } from 'nanoid';
 import { Repository } from 'typeorm';
+import { CreateAClassInput } from './dto/create-a-class.input';
+import { CreateModalityInput } from './dto/create-modality.input';
+import { EditClassInput } from './dto/edit-class-input';
+import { EditModalityInput } from './dto/edit-modality-input';
 
 @Injectable()
 export class ClassesService {
   constructor(
     @InjectRepository(Modality)
     private modalityRepository: Repository<Modality>,
+    @InjectRepository(Class)
+    private classesRepository: Repository<Class>,
   ) {}
-  async createModality(token, body, res) {
-    const requiredFields = ['name', 'color'];
 
-    for (const field of requiredFields) {
-      if (body[field] === undefined) {
-        return res.status(401).json(<httpResponse>{
-          statusCode: 401,
-          message: `Field ${field} is missing`,
-          body: new MissingParamError(field),
-        });
-      }
-    }
-
-    const trainer_data = getTrainerData(token);
-
-    //@ts-ignore
-    if (trainer_data.error === true) {
-      return res.status(401).json(trainer_data);
-    }
-
-    if (
-      //@ts-ignore
-      await createModality(
-        body,
-        trainer_data.body.userId,
-        this.modalityRepository,
-      )
-    ) {
-      return res.status(200).json(<httpResponse>{
-        statusCode: 200,
-        message: 'Modality created with successfull',
-        body: body,
-      });
-    } else {
-      return res
-        .status(500)
-        .json(serverError(new Error('Error on creating modality')));
-    }
+  async getAllModalities(userId): Promise<Modality[]> {
+    const modalities = await this.modalityRepository
+      .createQueryBuilder('modalities')
+      .where('modalities.trainer_id= :trainer_id', { trainer_id: userId })
+      .orderBy('created_at', 'DESC')
+      .getMany();
+    return modalities.reverse();
   }
 
-  async fetchModalities(token, res) {
-    const trainer_data = getTrainerData(token);
-    //@ts-ignore
-    if (trainer_data.error === true) {
-      return res.status(401).json(trainer_data);
-    }
-
-    try {
-      const modalities = await getModalities(
-        trainer_data.body.userId,
-        this.modalityRepository,
-      );
-      return res
-        .status(200)
-        .json(<httpResponse>{ statusCode: 200, body: modalities });
-    } catch (err) {
-      logger.error(err);
-      return res.status(500).json(serverError(err));
-    }
+  async getAModality(userId, modalityId): Promise<Modality> {
+    const modalities = await this.modalityRepository.findOne({
+      trainer_id: userId,
+      id: modalityId,
+    });
+    return modalities;
   }
 
-  async fetchModality(token, modality_id, res) {
-    const trainer_data = getTrainerData(token);
-    //@ts-ignore
-    if (trainer_data.error === true) {
-      return res.status(401).json(trainer_data);
+  async createModality(data: CreateModalityInput): Promise<Modality> {
+    const modalityId = nanoid();
+    await this.modalityRepository.query(
+      `insert into modalities (id, name,trainer_id, color) values ($1,$2,$3,$4)`,
+      [modalityId, data.name, data.trainer_id, data.color],
+    );
+    const modality = await this.getAModality(data.trainer_id, modalityId);
+    if (!modality) {
+      logger.error('Problem on creating modality');
+      throw new InternalServerErrorException('Problem on creating a modality');
     }
-    try {
-      const modality = await getModality(
-        trainer_data.body.userId,
-        modality_id,
-        this.modalityRepository,
-      );
-      if (modality) {
-        return res
-          .status(200)
-          .json(<httpResponse>{ statusCode: 200, body: modality });
-      } else {
-        return res
-          .status(500)
-          .json(serverError(new Error(`Modality ${modality_id} not found`)));
-      }
-    } catch (err) {
-      logger.error(err);
-      return res.status(500).json(serverError(err));
-    }
+    return modality;
   }
 
-  async deleteAModality(token, modality_id, res) {
-    const trainer_data = getTrainerData(token);
-    //@ts-ignore
-    if (trainer_data.error === true) {
-      return res.status(401).json(trainer_data);
+  async deleteAModality(userId: string, modalityId: string): Promise<Modality> {
+    const modality = await this.getAModality(userId, modalityId);
+
+    if (!modality) {
+      logger.error('Problem on delete modality');
+      throw new InternalServerErrorException('Problem on delete a modality');
     }
 
-    try {
-      if (
-        await deleteModality(
-          trainer_data.body.userId,
-          modality_id,
-          this.modalityRepository,
-        )
-      ) {
-        return res.status(200).json(<httpResponse>{
-          statusCode: 200,
-          message: `Modality ${modality_id} deleted`,
-          body: {},
-        });
-      } else {
-        return res
-          .status(500)
-          .json(serverError(new Error(`Modality ${modality_id} not found`)));
-      }
-    } catch (err) {
-      logger.error(err);
-      return res.status(500).json(serverError(err));
-    }
+    await this.modalityRepository.delete({
+      id: modalityId,
+      trainer_id: userId,
+    });
+
+    return modality;
   }
 
-  async editAModality(token, modality_id, body, res) {
-    const trainer_data = getTrainerData(token);
-    //@ts-ignore
-    if (trainer_data.error === true) {
-      return res.status(401).json(trainer_data);
+  async editAModality(
+    userId: string,
+    modalityId: string,
+    data: EditModalityInput,
+  ): Promise<Modality> {
+    const modality = await this.getAModality(userId, modalityId);
+
+    if (!modality) {
+      logger.error('Problem on edit modality');
+      throw new InternalServerErrorException('Problem on delete a modality');
     }
-    try {
-      if (
-        await editModality(
-          trainer_data.body.userId,
-          modality_id,
-          body,
-          this.modalityRepository,
-        )
-      ) {
-        return res.status(200).json(<httpResponse>{
-          statusCode: 200,
-          body,
-        });
-      } else {
-        return res
-          .status(500)
-          .json(serverError(new Error(`Modality ${modality_id} not found`)));
-      }
-    } catch (err) {
-      logger.error(err);
-      return res.status(500).json(serverError(err));
+
+    await this.modalityRepository.update(
+      { id: modalityId },
+      { ...data, updated_at: new Date().toISOString() },
+    );
+
+    const modalityUpdated = await this.modalityRepository.create({
+      ...modality,
+      ...data,
+    });
+
+    return modalityUpdated;
+  }
+
+  async getAClass(userId, classId): Promise<Class> {
+    const classes = await this.classesRepository.findOne({
+      trainer_id: userId,
+      id: classId,
+    });
+    return classes;
+  }
+
+  async getAllClasses(userId): Promise<Class[]> {
+    const classes = await this.classesRepository
+      .createQueryBuilder('classes')
+      .where('classes.trainer_id= :trainer_id', { trainer_id: userId })
+      .orderBy('created_at', 'DESC')
+      .getMany();
+    return classes;
+  }
+
+  async deleteAClass(userId: string, classId: string): Promise<Class> {
+    const _class = await this.getAClass(userId, classId);
+
+    if (!_class) {
+      logger.error('Problem on delete class');
+      throw new InternalServerErrorException('Problem on delete a class');
     }
+
+    await this.classesRepository.delete({
+      id: classId,
+      trainer_id: userId,
+    });
+
+    return _class;
+  }
+
+  async createAClass(data: CreateAClassInput): Promise<Class> {
+    if (!data.start_date || !data.end_date) {
+      logger.error('Invalid dates on creating class');
+      throw new InternalServerErrorException('Invalid dates on creating class');
+    }
+    const classId = nanoid();
+    await this.classesRepository.query(
+      `insert into classes (id, name, trainer_id, modality_id, start_date, end_date) values ($1,$2,$3,$4, $5, $6)`,
+      [
+        classId,
+        data.name,
+        data.trainer_id,
+        data.modality_id,
+        data.start_date,
+        data.end_date,
+      ],
+    );
+    const _class = await this.getAClass(data.trainer_id, classId);
+    if (!_class) {
+      logger.error('Problem on creating class');
+      throw new InternalServerErrorException('Problem on creating a class');
+    }
+    return _class;
+  }
+
+  async editAClass(
+    userId: string,
+    classId: string,
+    data: EditClassInput,
+  ): Promise<Class> {
+    const _class = await this.getAClass(userId, classId);
+
+    if (!_class) {
+      logger.error('Problem on edit class');
+      throw new InternalServerErrorException('Problem on delete a class');
+    }
+
+    await this.classesRepository.update(
+      { id: classId },
+      { ...data, updated_at: new Date().toISOString() },
+    );
+
+    const classUpdated = await this.classesRepository.create({
+      ..._class,
+      ...data,
+    });
+
+    return classUpdated;
   }
 }

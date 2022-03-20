@@ -2,8 +2,8 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
-@Entity('modalities')
-export class Modality {
+@Entity('classes')
+export class Class {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: string;
@@ -18,7 +18,15 @@ export class Modality {
 
   @Column()
   @Field(() => String)
-  color: string;
+  modality_id: string;
+
+  @Column()
+  @Field(() => Date)
+  start_date: Date;
+
+  @Column()
+  @Field(() => Date)
+  end_date: Date;
 
   @Column()
   @Field(() => Date)

@@ -8,8 +8,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @ApiOperation({
-    summary: 'Essa rota retorona se o servidor está funcionando',
-    description: 'Essa rota retorona se o servidor está funcionando',
+    summary: 'Essa rota retorna se o servidor está funcionando',
+    description: 'Essa rota retorna se o servidor está funcionando',
   })
   @Get('/health')
   async getHello(): Promise<string> {

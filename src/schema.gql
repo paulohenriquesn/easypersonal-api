@@ -1,0 +1,70 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Class {
+  id: ID!
+  name: String!
+  trainer_id: String!
+  modality_id: String!
+  start_date: DateTime!
+  end_date: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Modality {
+  id: ID!
+  name: String!
+  trainer_id: String!
+  color: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Query {
+  getAllModalities(userId: String!): [Modality!]!
+  getAModality(userId: String!, modalityId: String!): Modality!
+  getAClass(userId: String!, classId: String!): Class!
+  getAllClasses(userId: String!): [Class!]!
+}
+
+type Mutation {
+  createAModality(data: CreateModalityInput!): Modality!
+  deleteAModality(userId: String!, modalityId: String!): Modality!
+  editAModality(userId: String!, modalityId: String!, data: EditModalityInput!): Modality!
+  createAClass(data: CreateAClassInput!): Class!
+  deleteAClass(userId: String!, classId: String!): Class!
+  editAClass(userId: String!, classId: String!, data: EditClassInput!): Class!
+}
+
+input CreateModalityInput {
+  name: String!
+  trainer_id: String!
+  color: String!
+}
+
+input EditModalityInput {
+  name: String
+  color: String
+}
+
+input CreateAClassInput {
+  name: String!
+  trainer_id: String!
+  modality_id: String!
+  start_date: DateTime!
+  end_date: DateTime!
+}
+
+input EditClassInput {
+  name: String
+  modality_id: String
+  start_date: DateTime
+  end_date: DateTime
+}
