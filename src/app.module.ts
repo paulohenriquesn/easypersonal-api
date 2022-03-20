@@ -1,3 +1,4 @@
+import { Class } from '@entities/Class';
 import { Modality } from '@entities/Modality';
 import { User } from '@entities/User';
 import { UserSubscriptions } from '@entities/UserSubscription';
@@ -20,7 +21,7 @@ import { UserModule } from './users/user.module';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: process.env.DB_URL,
-        entities: [User, UserSubscriptions, Modality],
+        entities: [User, UserSubscriptions, Modality, Class],
         synchronize: false,
       }),
     }),

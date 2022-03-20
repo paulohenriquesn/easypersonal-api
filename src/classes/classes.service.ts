@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { Class } from '@entities/Class';
 import { Modality } from '@entities/Modality';
 import logger from '@log/logger';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { nanoid } from 'nanoid';
 import { Repository } from 'typeorm';
+import { CreateAClassInput } from './dto/create-a-class.input';
 import { CreateModalityInput } from './dto/create-modality.input';
+import { EditClassInput } from './dto/edit-class-input';
 import { EditModalityInput } from './dto/edit-modality-input';
 
 @Injectable()
@@ -13,13 +16,17 @@ export class ClassesService {
   constructor(
     @InjectRepository(Modality)
     private modalityRepository: Repository<Modality>,
+    @InjectRepository(Class)
+    private classesRepository: Repository<Class>,
   ) {}
 
   async getAllModalities(userId): Promise<Modality[]> {
-    const modalities = await this.modalityRepository.find({
-      trainer_id: userId,
-    });
-    return modalities;
+    const modalities = await this.modalityRepository
+      .createQueryBuilder('modalities')
+      .where('modalities.trainer_id= :trainer_id', { trainer_id: userId })
+      .orderBy('created_at', 'DESC')
+      .getMany();
+    return modalities.reverse();
   }
 
   async getAModality(userId, modalityId): Promise<Modality> {
@@ -72,7 +79,10 @@ export class ClassesService {
       throw new InternalServerErrorException('Problem on delete a modality');
     }
 
-    await this.modalityRepository.update({ id: modalityId }, { ...data });
+    await this.modalityRepository.update(
+      { id: modalityId },
+      { ...data, updated_at: new Date().toISOString() },
+    );
 
     const modalityUpdated = await this.modalityRepository.create({
       ...modality,
@@ -80,5 +90,88 @@ export class ClassesService {
     });
 
     return modalityUpdated;
+  }
+
+  async getAClass(userId, classId): Promise<Class> {
+    const classes = await this.classesRepository.findOne({
+      trainer_id: userId,
+      id: classId,
+    });
+    return classes;
+  }
+
+  async getAllClasses(userId): Promise<Class[]> {
+    const classes = await this.classesRepository
+      .createQueryBuilder('classes')
+      .where('classes.trainer_id= :trainer_id', { trainer_id: userId })
+      .orderBy('created_at', 'DESC')
+      .getMany();
+    return classes;
+  }
+
+  async deleteAClass(userId: string, classId: string): Promise<Class> {
+    const _class = await this.getAClass(userId, classId);
+
+    if (!_class) {
+      logger.error('Problem on delete class');
+      throw new InternalServerErrorException('Problem on delete a class');
+    }
+
+    await this.classesRepository.delete({
+      id: classId,
+      trainer_id: userId,
+    });
+
+    return _class;
+  }
+
+  async createAClass(data: CreateAClassInput): Promise<Class> {
+    if (!data.start_date || !data.end_date) {
+      logger.error('Invalid dates on creating class');
+      throw new InternalServerErrorException('Invalid dates on creating class');
+    }
+    const classId = nanoid();
+    await this.classesRepository.query(
+      `insert into classes (id, name, trainer_id, modality_id, start_date, end_date) values ($1,$2,$3,$4, $5, $6)`,
+      [
+        classId,
+        data.name,
+        data.trainer_id,
+        data.modality_id,
+        data.start_date,
+        data.end_date,
+      ],
+    );
+    const _class = await this.getAClass(data.trainer_id, classId);
+    if (!_class) {
+      logger.error('Problem on creating class');
+      throw new InternalServerErrorException('Problem on creating a class');
+    }
+    return _class;
+  }
+
+  async editAClass(
+    userId: string,
+    classId: string,
+    data: EditClassInput,
+  ): Promise<Class> {
+    const _class = await this.getAClass(userId, classId);
+
+    if (!_class) {
+      logger.error('Problem on edit class');
+      throw new InternalServerErrorException('Problem on delete a class');
+    }
+
+    await this.classesRepository.update(
+      { id: classId },
+      { ...data, updated_at: new Date().toISOString() },
+    );
+
+    const classUpdated = await this.classesRepository.create({
+      ..._class,
+      ...data,
+    });
+
+    return classUpdated;
   }
 }
