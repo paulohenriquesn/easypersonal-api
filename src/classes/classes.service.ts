@@ -59,10 +59,10 @@ export class ClassesService {
       throw new InternalServerErrorException('Problem on delete a modality');
     }
 
-    await this.modalityRepository.delete({
-      id: modalityId,
-      trainer_id: userId,
-    });
+    await this.modalityRepository.query(
+      `delete from modalities where id=$1 and trainer_id=$2`,
+      [modalityId, userId],
+    );
 
     return modality;
   }
@@ -117,10 +117,10 @@ export class ClassesService {
       throw new InternalServerErrorException('Problem on delete a class');
     }
 
-    await this.classesRepository.delete({
-      id: classId,
-      trainer_id: userId,
-    });
+    await this.classesRepository.query(
+      `delete from classes where id=$1 and trainer_id=$2`,
+      [classId, userId],
+    );
 
     return _class;
   }

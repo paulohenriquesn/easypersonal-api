@@ -4,19 +4,16 @@ import { MissingParamError } from '@errors/MissingParamError';
 import { SchemaInvalid } from '@errors/SchemaInvalid';
 import { TokenInvalid } from '@errors/TokenInvalid';
 import { badRequest, serverError } from '@helpers/http-helper';
-import { httpResponse } from '@interfaces/http';
 import logger from '@log/logger';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { signIn } from '@repositories/user/functions/user/signIn';
 import { signUp } from '@repositories/user/functions/user/signUp';
-import { updateUser } from '@repositories/user/functions/user/updateUser';
 import { userExists } from '@repositories/user/functions/user/userExists';
-import { validateJwtToken } from '@repositories/user/functions/user/validateToken';
 import { validateToken } from '@repositories/user/providers/google/verifyToken';
-import { getUser } from '@repositories/user/storage/getUser';
 import { userSchema } from '@schemas/User/yupValidator';
 import { Repository } from 'typeorm';
+import { EditAUserInput } from './dto/edit-a-user-input';
 
 @Injectable()
 export class UserService {
@@ -26,6 +23,34 @@ export class UserService {
     @InjectRepository(UserSubscriptions)
     private subscriptionsRepository: Repository<UserSubscriptions>,
   ) {}
+
+  async getUser(userId): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['modalities', 'classes'],
+    });
+    return user;
+  }
+
+  async editAUser(userId: string, data: EditAUserInput): Promise<User> {
+    const user = await this.getUser(userId);
+
+    if (!user) {
+      logger.error('Problem on edit user');
+      throw new InternalServerErrorException('Problem on delete a modality');
+    }
+
+    await this.userRepository.update({ id: userId }, { ...data });
+
+    const userUpdated = await this.userRepository.create({
+      ...user,
+      ...data,
+    });
+
+    return userUpdated;
+  }
 
   async auth(body, response) {
     const { email, google_token } = body;
@@ -66,39 +91,6 @@ export class UserService {
       }
     } catch (err) {
       return response.status(500).json(serverError(err));
-    }
-  }
-
-  async fetch(token, response) {
-    try {
-      const token_decoded = validateJwtToken(token.split(' ')[1]);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      const user = await getUser(token_decoded.userEmail, this.userRepository);
-      return response
-        .status(200)
-        .json(<httpResponse>{ statusCode: 200, body: user });
-    } catch (err) {
-      logger.error(err);
-      return response.status(500).json(serverError(new TokenInvalid()));
-    }
-  }
-
-  async update(token, body, response) {
-    try {
-      const token_decoded = validateJwtToken(token.split(' ')[1]);
-      if (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        await updateUser(token_decoded.userEmail, body, this.userRepository)
-      ) {
-        return response
-          .status(200)
-          .json(<httpResponse>{ statusCode: 200, body });
-      }
-    } catch (err) {
-      logger.error(err);
-      return response.status(500).json(serverError(new TokenInvalid()));
     }
   }
 }

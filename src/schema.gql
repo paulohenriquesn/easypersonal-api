@@ -2,13 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Class {
+type Modality {
   id: ID!
   name: String!
-  trainer_id: String!
-  modality_id: String!
-  start_date: DateTime!
-  end_date: DateTime!
+  color: String!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -18,16 +15,32 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Modality {
+type User {
+  id: ID!
+  full_name: String!
+  email: String!
+  picture: String!
+  cpf: String!
+  address: String!
+  birthday: String!
+  cellphone: String!
+  modalities: [Modality!]
+  classes: [Class!]
+  student: Boolean!
+}
+
+type Class {
   id: ID!
   name: String!
-  trainer_id: String!
-  color: String!
+  modality_id: String!
+  start_date: DateTime!
+  end_date: DateTime!
   created_at: DateTime!
   updated_at: DateTime!
 }
 
 type Query {
+  getAUser(userId: String!): User!
   getAllModalities(userId: String!): [Modality!]!
   getAModality(userId: String!, modalityId: String!): Modality!
   getAClass(userId: String!, classId: String!): Class!
@@ -35,12 +48,22 @@ type Query {
 }
 
 type Mutation {
+  editAUser(userId: String!, data: EditAUserInput!): User!
   createAModality(data: CreateModalityInput!): Modality!
   deleteAModality(userId: String!, modalityId: String!): Modality!
   editAModality(userId: String!, modalityId: String!, data: EditModalityInput!): Modality!
   createAClass(data: CreateAClassInput!): Class!
   deleteAClass(userId: String!, classId: String!): Class!
   editAClass(userId: String!, classId: String!, data: EditClassInput!): Class!
+}
+
+input EditAUserInput {
+  full_name: String
+  picture: String
+  address: String
+  cpf: String
+  cellphone: String
+  birhday: DateTime
 }
 
 input CreateModalityInput {

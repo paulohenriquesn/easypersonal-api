@@ -1,15 +1,5 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Headers,
-  Post,
-  Put,
-  Res,
-  UseGuards
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post, Res } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { authUserDto } from './swagger/authUser';
 import { UserService } from './user.service';
 
@@ -28,31 +18,5 @@ export class UserController {
   @Post('/auth')
   async auth(@Body() body, @Res() res) {
     return await this.userService.auth(body, res);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @ApiOperation({
-    summary: 'Essa rota retorna os dados de um usuario utilizando (JWT Token)',
-    description:
-      'Essa rota retorna os dados de um usuario utilizando (JWT Token)',
-  })
-  @ApiSecurity('jwt_token')
-  @Get('/')
-  async fetch(@Headers() headers, @Res() res) {
-    const token = headers.authorization;
-    return await this.userService.fetch(token, res);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @ApiSecurity('jwt_token')
-  @ApiOperation({
-    summary: 'Essa rota atualiza os dados de um usuario utilizando (JWT Token)',
-    description:
-      'Essa rota atualiza os dados de um usuario utilizando (JWT Token)',
-  })
-  @Put('/')
-  async updateUser(@Headers() headers, @Body() body, @Res() res) {
-    const token = headers.authorization;
-    return await this.userService.update(token, body, res);
   }
 }
