@@ -41,20 +41,20 @@ type Class {
 
 type Query {
   getAUser(userId: String!): User!
-  getAllModalities(userId: String!): [Modality!]!
-  getAModality(userId: String!, modalityId: String!): Modality!
   getAClass(userId: String!, classId: String!): Class!
   getAllClasses(userId: String!): [Class!]!
+  getAllModalities(userId: String!): [Modality!]!
+  getAModality(userId: String!, modalityId: String!): Modality!
 }
 
 type Mutation {
   editAUser(userId: String!, data: EditAUserInput!): User!
-  createAModality(data: CreateModalityInput!): Modality!
-  deleteAModality(userId: String!, modalityId: String!): Modality!
-  editAModality(userId: String!, modalityId: String!, data: EditModalityInput!): Modality!
   createAClass(data: CreateAClassInput!): Class!
   deleteAClass(userId: String!, classId: String!): Class!
   editAClass(userId: String!, classId: String!, data: EditClassInput!): Class!
+  createAModality(data: CreateModalityInput!): Modality!
+  deleteAModality(userId: String!, modalityId: String!): Modality!
+  editAModality(userId: String!, modalityId: String!, data: EditModalityInput!): Modality!
 }
 
 input EditAUserInput {
@@ -64,17 +64,6 @@ input EditAUserInput {
   cpf: String
   cellphone: String
   birhday: DateTime
-}
-
-input CreateModalityInput {
-  name: String!
-  trainer_id: String!
-  color: String!
-}
-
-input EditModalityInput {
-  name: String
-  color: String
 }
 
 input CreateAClassInput {
@@ -90,4 +79,15 @@ input EditClassInput {
   modality_id: String
   start_date: DateTime
   end_date: DateTime
+}
+
+input CreateModalityInput {
+  name: String!
+  trainer_id: String!
+  color: String!
+}
+
+input EditModalityInput {
+  name: String
+  color: String
 }

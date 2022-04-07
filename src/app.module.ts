@@ -12,6 +12,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ClassesModule } from './classes/classes.module';
+import { ModalitiesModule } from './modalities/modality.module';
 import { UserModule } from './users/user.module';
 @Module({
   imports: [
@@ -23,11 +24,6 @@ import { UserModule } from './users/user.module';
         url: process.env.DB_URL,
         entities: [User, UserSubscriptions, Modality, Class],
         synchronize: false,
-        extra: {
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        },
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -37,6 +33,7 @@ import { UserModule } from './users/user.module';
     AuthModule,
     UserModule,
     ClassesModule,
+    ModalitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
