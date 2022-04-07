@@ -7,18 +7,23 @@ export async function editAModality(
   request,
   modalityRepository,
 ): Promise<Modality> {
-  const { userId, modalityId } = request;
+  const { userId, modalityId, data } = request;
   const modality = await getAModality({ userId }, modalityId);
 
   if (!modality) {
-    logger.error('Problem on delete modality');
+    logger.error('Problem on edit modality');
     throw new InternalServerErrorException('Problem on delete a modality');
   }
 
-  await modalityRepository.query(
-    `delete from modalities where id=$1 and trainer_id=$2`,
-    [modalityId, userId],
+  await modalityRepository.update(
+    { id: modalityId },
+    { ...data, updated_at: new Date().toISOString() },
   );
 
-  return modality;
+  const modalityUpdated = await modalityRepository.create({
+    ...modality,
+    ...data,
+  });
+
+  return modalityUpdated;
 }
