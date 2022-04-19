@@ -2,7 +2,7 @@
 import { Class } from '@entities/Class';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createAClass } from '@repositories/classes/storage/createAClass';
+import { createAClass } from '@repositories/classes/functions/createAClass';
 import { deleteAClass } from '@repositories/classes/storage/deleteAClass';
 import { editAClass } from '@repositories/classes/storage/editAClass';
 import { getAClass } from '@repositories/classes/storage/getAClass';
@@ -31,7 +31,7 @@ export class ClassesService {
   }
 
   async createAClass(data: CreateAClassInput): Promise<Class> {
-    return await createAClass({ data }, this.classesRepository);
+    return await createAClass(data, this.classesRepository);
   }
 
   async editAClass(

@@ -8,6 +8,7 @@ create table workouts_muscular_groups(
 
 create table workouts_times (
   id text primary key,
+  name text not null,
   user_id uuid not null,
   repeat_type text not null,
   repeat_value int not null,

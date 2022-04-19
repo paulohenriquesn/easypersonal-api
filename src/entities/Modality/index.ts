@@ -1,12 +1,5 @@
-import { User } from '@entities/User';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity('modalities')
@@ -18,11 +11,6 @@ export class Modality {
   @Column()
   @Field(() => String)
   name: string;
-
-  //@Column()
-  @ManyToOne(() => User, (user) => user.modalities)
-  @JoinColumn({ name: 'trainer_id' })
-  trainer_id: User;
 
   @Column()
   @Field(() => String)

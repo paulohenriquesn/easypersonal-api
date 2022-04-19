@@ -12,9 +12,7 @@ interface IUser {
 
 export async function createUser(
   userObject: IUser,
-  userType: string,
   repositories?: any,
-  trainerRelation?: any,
 ): Promise<any> {
   if (!isEmail(userObject.email)) {
     throw new ParamInvalid('email');
@@ -24,26 +22,14 @@ export async function createUser(
   try {
     const userId = uuidv4();
     await repositories.user.query(
-      'insert into users(id, full_name,email,student) values ($1,$2,$3,$4)',
-      [
-        userId,
-        userObject.full_name,
-        userObject.email,
-        userType === 'student' ? true : false,
-      ],
+      'insert into users(id, full_name,email) values ($1,$2,$3)',
+      [userId, userObject.full_name, userObject.email],
     );
-    if (userType === 'trainer') {
-      await repositories.subscription.query(
-        'insert into subscriptions(id, user_id) values ($1,$2)',
-        [nanoid(), userId],
-      );
-    }
-    if (userType === 'student') {
-      //trainerRelation
-    }
-    logger.success(
-      `User ${userObject.email} with permission ${userType} created with successfull`,
+    await repositories.subscription.query(
+      'insert into subscriptions(id, user_id) values ($1,$2)',
+      [nanoid(), userId],
     );
+    logger.success(`User ${userObject.email} created with successfull`);
 
     return {
       created: true,

@@ -1,8 +1,8 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class CreateAClassInput {
+export class CreateAMuscularGroupInput {
   @Field((type) => String)
   @IsString()
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
@@ -11,15 +11,10 @@ export class CreateAClassInput {
   @Field((type) => String)
   @IsString()
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  trainer_id: string;
+  user_id: string;
 
   @Field((type) => String)
   @IsString()
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  modality_id: string;
-
-  @Field((type) => String!, { nullable: false })
-  @IsDate()
-  @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  dates: string;
+  icon_name: string;
 }

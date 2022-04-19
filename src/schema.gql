@@ -2,10 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Modality {
+type Class {
   id: ID!
   name: String!
-  color: String!
+  modality_id: String!
+  dates: DateTime!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -15,28 +16,36 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Modality {
+  id: ID!
+  name: String!
+  color: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type WorkoutTime {
+  id: ID!
+  name: String!
+  repeat_type: String!
+  repeat_value: Float!
+  weight: Float!
+}
+
 type User {
   id: ID!
   full_name: String!
   email: String!
   picture: String!
-  cpf: String!
-  address: String!
-  birthday: String!
   cellphone: String!
-  modalities: [Modality!]
-  classes: [Class!]
-  student: Boolean!
+  workouts_muscular_groups: [MuscularGroup!]
+  workouts_times: [WorkoutTime!]
 }
 
-type Class {
+type MuscularGroup {
   id: ID!
   name: String!
-  modality_id: String!
-  start_date: DateTime!
-  end_date: DateTime!
-  created_at: DateTime!
-  updated_at: DateTime!
+  icon_name: String!
 }
 
 type Query {
@@ -45,6 +54,8 @@ type Query {
   getAllClasses(userId: String!): [Class!]!
   getAllModalities(userId: String!): [Modality!]!
   getAModality(userId: String!, modalityId: String!): Modality!
+  getAWorkoutTime(userId: String!, workoutTimeId: String!): WorkoutTime!
+  getAMuscularGroup(userId: String!, muscularGroupId: String!): MuscularGroup!
 }
 
 type Mutation {
@@ -55,23 +66,25 @@ type Mutation {
   createAModality(data: CreateModalityInput!): Modality!
   deleteAModality(userId: String!, modalityId: String!): Modality!
   editAModality(userId: String!, modalityId: String!, data: EditModalityInput!): Modality!
+  editAWorkoutTime(userId: String!, workoutTimeId: String!, data: EditMuscularGroupInput!): WorkoutTime!
+  deleteAWorkoutTime(userId: String!, workoutTimeId: String!): WorkoutTime!
+  createAWorkoutTime(data: CreateAWorkoutTimeInput!): WorkoutTime!
+  createAMuscularGroup(data: CreateAMuscularGroupInput!): MuscularGroup!
+  deleteAMuscularGroup(userId: String!, muscularGroupId: String!): MuscularGroup!
+  editAMuscularGroup(userId: String!, muscularGroupId: String!, data: EditMuscularGroupInput!): MuscularGroup!
 }
 
 input EditAUserInput {
   full_name: String
   picture: String
-  address: String
-  cpf: String
   cellphone: String
-  birhday: DateTime
 }
 
 input CreateAClassInput {
   name: String!
   trainer_id: String!
   modality_id: String!
-  start_date: DateTime!
-  end_date: DateTime!
+  dates: String!
 }
 
 input EditClassInput {
@@ -90,4 +103,23 @@ input CreateModalityInput {
 input EditModalityInput {
   name: String
   color: String
+}
+
+input EditMuscularGroupInput {
+  name: String
+  icon_name: String
+}
+
+input CreateAWorkoutTimeInput {
+  name: String!
+  user_id: String!
+  repeat_type: String!
+  repeat_value: Float!
+  weight: Float!
+}
+
+input CreateAMuscularGroupInput {
+  name: String!
+  user_id: String!
+  icon_name: String!
 }
