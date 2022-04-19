@@ -34,6 +34,11 @@ import { WorkoutsModule } from './workouts/workouts.module';
           WorkoutTime,
         ],
         synchronize: false,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        },
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
