@@ -18,13 +18,8 @@ export class CreateAClassInput {
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
   modality_id: string;
 
-  @Field((type) => Date!, { nullable: false })
+  @Field((type) => String!, { nullable: false })
   @IsDate()
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  start_date: Date;
-
-  @Field((type) => Date!, { nullable: false })
-  @IsDate()
-  @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  end_date: Date;
+  dates: string;
 }

@@ -29,7 +29,7 @@ export class UserService {
       where: {
         id: userId,
       },
-      relations: ['modalities', 'classes'],
+      relations: ['workouts_muscular_groups', 'workouts_times'],
     });
     return user;
   }
@@ -80,7 +80,7 @@ export class UserService {
           });
           return response.status(signInUser.statusCode).json(signInUser);
         } else {
-          const signUpUser = await signUp('trainer', body, {
+          const signUpUser = await signUp(body, {
             user: this.userRepository,
             subscription: this.subscriptionsRepository,
           });

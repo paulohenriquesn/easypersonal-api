@@ -1,5 +1,5 @@
-import { Class } from '@entities/Class';
-import { Modality } from '@entities/Modality';
+import { MuscularGroup } from '@entities/MuscularGroup';
+import { WorkoutTime } from '@entities/WorkoutTime';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -24,29 +24,16 @@ export class User {
 
   @Field(() => String)
   @Column()
-  cpf: string;
+  cellphone?: string;
 
-  @Field(() => String)
-  @Column()
-  address: string;
+  @Field(() => [MuscularGroup], { nullable: true })
+  @OneToMany(
+    () => MuscularGroup,
+    (workout_muscular_group) => workout_muscular_group.user_id,
+  )
+  workouts_muscular_groups?: MuscularGroup[];
 
-  @Field(() => String)
-  @Column()
-  birthday: string;
-
-  @Field(() => String)
-  @Column()
-  cellphone: string;
-
-  @Field(() => [Modality], { nullable: true })
-  @OneToMany(() => Modality, (modality) => modality.trainer_id)
-  modalities?: Modality[];
-
-  @Field(() => [Class], { nullable: true })
-  @OneToMany(() => Class, (classes) => classes.trainer_id)
-  classes?: Class[];
-
-  @Field(() => Boolean)
-  @Column()
-  student: boolean;
+  @Field(() => [WorkoutTime], { nullable: true })
+  @OneToMany(() => WorkoutTime, (workout_time) => workout_time.user_id)
+  workouts_times?: WorkoutTime[];
 }

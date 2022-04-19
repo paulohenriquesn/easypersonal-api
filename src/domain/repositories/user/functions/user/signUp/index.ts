@@ -6,11 +6,7 @@ import { createUser as createUserStorage } from '@repositories/user/storage/crea
 import { userSchema } from '@schemas/User/yupValidator';
 import { generateUserToken } from '../generateToken';
 
-export async function signUp(
-  userType,
-  body,
-  repositories?,
-): Promise<httpResponse> {
+export async function signUp(body, repositories?): Promise<httpResponse> {
   const requiredFields = ['email', 'full_name'];
 
   for (const field of requiredFields) {
@@ -24,10 +20,10 @@ export async function signUp(
   }
 
   //@ts-ignore
-  const user = await createUserStorage(body, userType, repositories);
+  const user = await createUserStorage(body, repositories);
   if (user.created) {
     const userToken = await generateUserToken({
-      student: userType === 'student' ? true : false,
+      student: false,
       email: body.email,
       id: user.user_data.id,
     });

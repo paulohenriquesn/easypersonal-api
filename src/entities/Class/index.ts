@@ -1,11 +1,7 @@
-import { User } from '@entities/User';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn
+  Entity, PrimaryGeneratedColumn
 } from 'typeorm';
 
 @ObjectType()
@@ -19,21 +15,13 @@ export class Class {
   @Field(() => String)
   name: string;
 
-  @ManyToOne(() => User, (user) => user.classes)
-  @JoinColumn({ name: 'trainer_id' })
-  trainer_id: User;
-
   @Column()
   @Field(() => String)
   modality_id: string;
 
-  @Column()
+  @Column({ type: 'jsonb' })
   @Field(() => Date)
-  start_date: Date;
-
-  @Column()
-  @Field(() => Date)
-  end_date: Date;
+  dates: string;
 
   @Column()
   @Field(() => Date)
