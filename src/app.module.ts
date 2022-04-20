@@ -3,6 +3,9 @@ import { Modality } from '@entities/Modality';
 import { MuscularGroup } from '@entities/MuscularGroup';
 import { User } from '@entities/User';
 import { UserSubscriptions } from '@entities/UserSubscription';
+import { Workout } from '@entities/Workout';
+import { WorkoutGroup } from '@entities/WorkoutGroup';
+import { WorkoutGroupRelation } from '@entities/WorkoutGroupRelation';
 import { WorkoutTime } from '@entities/WorkoutTime';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
@@ -32,13 +35,11 @@ import { WorkoutsModule } from './workouts/workouts.module';
           Class,
           MuscularGroup,
           WorkoutTime,
+          WorkoutGroup,
+          Workout,
+          WorkoutGroupRelation,
         ],
         synchronize: false,
-        extra: {
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        },
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({

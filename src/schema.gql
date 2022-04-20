@@ -24,6 +24,18 @@ type Modality {
   updated_at: DateTime!
 }
 
+type Workout {
+  id: ID!
+  name: String!
+  muscular_group_id: String!
+  workout_time_id: String!
+}
+
+type WorkoutGroup {
+  id: ID!
+  name: String!
+}
+
 type WorkoutTime {
   id: ID!
   name: String!
@@ -40,6 +52,8 @@ type User {
   cellphone: String!
   workouts_muscular_groups: [MuscularGroup!]
   workouts_times: [WorkoutTime!]
+  workouts_groups: [WorkoutGroup!]
+  workouts: [Workout!]
 }
 
 type MuscularGroup {
@@ -48,12 +62,22 @@ type MuscularGroup {
   icon_name: String!
 }
 
+type WorkoutGroupRelation {
+  id: ID!
+  workout_group_id: String!
+  workout_id: String!
+  user_id: String!
+}
+
 type Query {
   getAUser(userId: String!): User!
   getAClass(userId: String!, classId: String!): Class!
   getAllClasses(userId: String!): [Class!]!
   getAllModalities(userId: String!): [Modality!]!
   getAModality(userId: String!, modalityId: String!): Modality!
+  getWorkoutsFromGroup(userId: String!, workoutGroupId: String!): [Workout!]!
+  getAWorkout(userId: String!, workoutId: String!): Workout!
+  getAWorkoutGroup(userId: String!, workoutGroupId: String!): WorkoutGroup!
   getAWorkoutTime(userId: String!, workoutTimeId: String!): WorkoutTime!
   getAMuscularGroup(userId: String!, muscularGroupId: String!): MuscularGroup!
 }
@@ -66,6 +90,14 @@ type Mutation {
   createAModality(data: CreateModalityInput!): Modality!
   deleteAModality(userId: String!, modalityId: String!): Modality!
   editAModality(userId: String!, modalityId: String!, data: EditModalityInput!): Modality!
+  deleteAWorkoutFromGroup(userId: String!, workoutGroupId: String!, workoutId: String!): Workout!
+  createAWorkoutGroupRelation(data: CreateAWorkoutGroupRelationInput!): WorkoutGroupRelation!
+  editAWorkout(userId: String!, workoutId: String!, data: EditMuscularGroupInput!): Workout!
+  deleteAWorkout(userId: String!, workoutId: String!): Workout!
+  createAWorkout(data: CreateAWorkoutInput!): Workout!
+  editAWorkoutGroup(userId: String!, workoutGroupId: String!, data: EditMuscularGroupInput!): WorkoutGroup!
+  deleteAWorkoutGroup(userId: String!, workoutGroupId: String!): WorkoutGroup!
+  createAWorkoutGroup(data: CreateAWorkoutGroupInput!): WorkoutGroup!
   editAWorkoutTime(userId: String!, workoutTimeId: String!, data: EditMuscularGroupInput!): WorkoutTime!
   deleteAWorkoutTime(userId: String!, workoutTimeId: String!): WorkoutTime!
   createAWorkoutTime(data: CreateAWorkoutTimeInput!): WorkoutTime!
@@ -105,9 +137,27 @@ input EditModalityInput {
   color: String
 }
 
+input CreateAWorkoutGroupRelationInput {
+  user_id: String!
+  workout_group_id: String!
+  workout_id: String!
+}
+
 input EditMuscularGroupInput {
   name: String
   icon_name: String
+}
+
+input CreateAWorkoutInput {
+  name: String!
+  user_id: String!
+  muscular_group_id: String!
+  workout_time_id: String!
+}
+
+input CreateAWorkoutGroupInput {
+  name: String!
+  user_id: String!
 }
 
 input CreateAWorkoutTimeInput {

@@ -2,12 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class CreateAWorkoutInput {
-  @Field((type) => String)
-  @IsString()
-  @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  name: string;
-
+export class CreateAWorkoutGroupRelationInput {
   @Field((type) => String)
   @IsString()
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
@@ -16,10 +11,10 @@ export class CreateAWorkoutInput {
   @Field((type) => String)
   @IsString()
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  muscular_group_id: string;
+  workout_group_id: string;
 
   @Field((type) => String)
   @IsString()
   @IsNotEmpty({ message: 'Este campo não pode estar vazio' })
-  workout_time_id: string;
+  workout_id: string;
 }

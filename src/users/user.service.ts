@@ -29,7 +29,12 @@ export class UserService {
       where: {
         id: userId,
       },
-      relations: ['workouts_muscular_groups', 'workouts_times'],
+      relations: [
+        'workouts_muscular_groups',
+        'workouts_times',
+        'workouts_groups',
+        'workouts',
+      ],
     });
     return user;
   }

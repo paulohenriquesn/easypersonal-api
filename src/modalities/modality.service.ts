@@ -23,7 +23,7 @@ export class ModalityService {
   }
 
   async getAModality(userId, modalityId): Promise<Modality> {
-    return await getAModality({ userId,modalityId }, this.modalityRepository);
+    return await getAModality({ userId, modalityId }, this.modalityRepository);
   }
 
   async createModality(data: CreateModalityInput): Promise<Modality> {
