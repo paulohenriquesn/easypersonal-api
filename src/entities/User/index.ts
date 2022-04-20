@@ -1,4 +1,6 @@
 import { MuscularGroup } from '@entities/MuscularGroup';
+import { Workout } from '@entities/Workout';
+import { WorkoutGroup } from '@entities/WorkoutGroup';
 import { WorkoutTime } from '@entities/WorkoutTime';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -36,4 +38,12 @@ export class User {
   @Field(() => [WorkoutTime], { nullable: true })
   @OneToMany(() => WorkoutTime, (workout_time) => workout_time.user_id)
   workouts_times?: WorkoutTime[];
+
+  @Field(() => [WorkoutGroup], { nullable: true })
+  @OneToMany(() => WorkoutGroup, (workout_group) => workout_group.user_id)
+  workouts_groups?: WorkoutGroup[];
+
+  @Field(() => [Workout], { nullable: true })
+  @OneToMany(() => Workout, (workout) => workout.user_id)
+  workouts?: Workout[];
 }
